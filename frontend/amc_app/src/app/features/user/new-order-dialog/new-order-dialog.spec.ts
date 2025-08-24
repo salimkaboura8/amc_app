@@ -1,18 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NewOrderDialogComponent } from './new-order-dialog';
 
-import { NewOrderDialog } from './new-order-dialog';
-
-describe('NewOrderDialog', () => {
-  let component: NewOrderDialog;
-  let fixture: ComponentFixture<NewOrderDialog>;
+describe('NewOrderDialogComponent', () => {
+  let component: NewOrderDialogComponent;
+  let fixture: ComponentFixture<NewOrderDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewOrderDialog]
-    })
-    .compileComponents();
+      imports: [NewOrderDialogComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(NewOrderDialog);
+    fixture = TestBed.createComponent(NewOrderDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
