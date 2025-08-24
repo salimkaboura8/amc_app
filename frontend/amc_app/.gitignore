@@ -40,3 +40,70 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# .NET build outputs
+**/bin/
+**/obj/
+[Bb]uild/
+[Ll]og/
+logs/
+artifacts/
+TestResults/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# User-specific
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+.nuget/
+packages/
+project.lock.json
+project.assets.json
+PackageRestoreConsent.config
+
+# ASP.NET Core config (local/dev)
+appsettings.*.local.json
+appsettings.Local.json
+secrets.json
+
+# Publish profiles
+*.pubxml
+*.publishsettings
+PublishProfiles/
+
+# EF Core (generated build folders)
+Migrations/**/bin/
+Migrations/**/obj/
+
+# Coverage / test artifacts
+*.coverage
+*.coveragexml
+coverage/
+.vstest/
+.nCrunch*/
+*.ncrunchsolution
+*.ncrunchproject
+
+# Certificates / keys
+*.pfx
+*.p12
+*.cer
+*.key
+
+# Local tools and cache
+.local/
+tools/**
+!.config/dotnet-tools.json
