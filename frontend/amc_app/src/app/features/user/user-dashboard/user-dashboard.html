@@ -64,14 +64,13 @@
     [draggable]="false"
     [resizable]="false"
     header="Nouvelle commande"
-    [style]="{ width: '420px' }"
+    [style]="{ width: '520px' }"
     (onHide)="closeNewOrderDialog()"
   >
-    <div class="dialog-placeholder">
-      <p>Formulaire de commande à venir…</p>
-    </div>
-    <ng-template pTemplate="footer">
-      <button pButton label="Fermer" (click)="closeNewOrderDialog()"></button>
-    </ng-template>
+    <app-new-order-dialog
+      [initialDate]="today"
+      (submitOrder)="handleCreateOrder($event)"
+      (onCancel)="closeNewOrderDialog()"
+    ></app-new-order-dialog>
   </p-dialog>
 </div>

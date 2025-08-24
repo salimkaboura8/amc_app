@@ -1,0 +1,43 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="field">
+    <label for="firstName">Prénom</label>
+    <input id="firstName" type="text" pInputText formControlName="firstName" />
+  </div>
+
+  <div class="field">
+    <label for="lastName">Nom</label>
+    <input id="lastName" type="text" pInputText formControlName="lastName" />
+  </div>
+
+  <div class="field">
+    <label for="phone">Num. Téléphone</label>
+    <input id="phone" type="tel" pInputText formControlName="phone" />
+  </div>
+
+  <div class="field">
+    <label for="date">Date</label>
+
+    <p-datepicker id="date" formControlName="date" dateFormat="yy-mm-dd" [showIcon]="true" />
+  </div>
+
+  <div class="field">
+    <label for="items">Nb d'Articles</label>
+    <p-inputNumber
+      id="items"
+      formControlName="items"
+      [min]="1"
+      [useGrouping]="false"
+    ></p-inputNumber>
+  </div>
+
+  <div class="actions">
+    <button
+      pButton
+      type="button"
+      label="Annuler"
+      severity="secondary"
+      (click)="onCancel.emit()"
+    ></button>
+    <button pButton type="submit" label="Valider" [disabled]="form.invalid"></button>
+  </div>
+</form>
