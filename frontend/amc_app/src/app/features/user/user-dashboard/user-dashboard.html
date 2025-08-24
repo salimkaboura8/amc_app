@@ -1,1 +1,77 @@
-<p>user-dashboard works!</p>
+<div class="dashboard">
+  <p-toolbar class="header">
+    <div class="p-toolbar-group-start">
+      <span class="title">Tableau de bord</span>
+    </div>
+    <div class="p-toolbar-group-end">
+      <button
+        pButton
+        icon="pi pi-plus"
+        label="Nouvelle commande"
+        (click)="openNewOrderDialog()"
+        class="mr-2"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-sign-out"
+        label="Se déconnecter"
+        severity="secondary"
+        (click)="logout()"
+      ></button>
+    </div>
+  </p-toolbar>
+
+  <div class="content">
+    <h3 class="section-title">Mes commandes</h3>
+
+    <p-table
+      [value]="orders"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '640px' }"
+      class="orders-table"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Commande</th>
+          <th>Date</th>
+          <th>Articles</th>
+          <th>Montant</th>
+          <th>Statut</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.date }}</td>
+          <td>{{ order.itemsCount }}</td>
+          <td>{{ order.amount | number : '1.2-2' }} €</td>
+          <td>
+            <p-tag [value]="order.status" [severity]="statusSeverity(order.status)"></p-tag>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">Aucune commande pour le moment.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog
+    [(visible)]="newOrderDialogVisible"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    header="Nouvelle commande"
+    [style]="{ width: '420px' }"
+    (onHide)="closeNewOrderDialog()"
+  >
+    <div class="dialog-placeholder">
+      <p>Formulaire de commande à venir…</p>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="Fermer" (click)="closeNewOrderDialog()"></button>
+    </ng-template>
+  </p-dialog>
+</div>
