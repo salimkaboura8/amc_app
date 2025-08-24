@@ -16,13 +16,7 @@ public class PasswordHasher : IPasswordHasher
     {
         var iterations = 100_000;
         var salt = RandomNumberGenerator.GetBytes(16);
-        var hash = KeyDerivation.Pbkdf2(
-            password,
-            salt,
-            KeyDerivationPrf.HMACSHA256,
-            iterations,
-            32);
-
+        var hash = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, iterations, 32);
         return $"{iterations}.{Convert.ToBase64String(salt)}.{Convert.ToBase64String(hash)}";
     }
 
@@ -35,13 +29,7 @@ public class PasswordHasher : IPasswordHasher
         var salt = Convert.FromBase64String(parts[1]);
         var expected = Convert.FromBase64String(parts[2]);
 
-        var actual = KeyDerivation.Pbkdf2(
-            password,
-            salt,
-            KeyDerivationPrf.HMACSHA256,
-            iterations,
-            expected.Length);
-
+        var actual = KeyDerivation.Pbkdf2(password, salt, KeyDerivationPrf.HMACSHA256, iterations, expected.Length);
         return CryptographicOperations.FixedTimeEquals(actual, expected);
     }
 }

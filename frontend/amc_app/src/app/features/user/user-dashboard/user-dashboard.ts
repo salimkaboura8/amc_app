@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Router } from '@angular/router';
+import { OrdersService } from '../../../core/services/orders.service';
 
 type OrderStatus = 'EN_COURS' | 'LIVREE';
 
@@ -24,7 +25,7 @@ type Order = {
   templateUrl: './user-dashboard.html',
   styleUrls: ['./user-dashboard.scss'],
 })
-export class UserDashboard {
+export class UserDashboard implements OnInit {
   newOrderDialogVisible = false;
 
   orders: Order[] = [
@@ -33,7 +34,13 @@ export class UserDashboard {
     { id: 'CMD-003', date: '2025-08-24', itemsCount: 7, amount: 36.0, status: 'EN_COURS' },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private ordersService: OrdersService) {}
+
+  ngOnInit(): void {
+    this.ordersService.getOrders().subscribe((data) => {
+      console.log(data);
+    });
+  }
 
   openNewOrderDialog(): void {
     this.newOrderDialogVisible = true;

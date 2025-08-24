@@ -5,6 +5,8 @@ using Backend.DTOs;
 using Backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +23,21 @@ builder.Services.AddCors(options =>
     });
 });
 
-// DbContext
 builder.Services.AddDbContext<AppDbContext>(o =>
-    o.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 // JWT options from configuration (with validation)
-var jwtOptions = new JwtOptions();
-builder.Configuration.GetSection("Jwt").Bind(jwtOptions);
-if (string.IsNullOrWhiteSpace(jwtOptions.Key))
-    throw new InvalidOperationException("Jwt:Key is missing. Configure a non-empty secret key.");
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey) || Encoding.UTF8.GetByteCount(jwtKey) < 32)
+    throw new InvalidOperationException("Jwt:Key must be at least 32 bytes (e.g., 32+ ASCII chars).");
+
+var jwtOptions = new JwtOptions
+{
+    Key = jwtKey!,
+    Issuer = builder.Configuration["Jwt:Issuer"] ?? "your-app",
+    Audience = builder.Configuration["Jwt:Audience"] ?? "your-app-clients",
+    ExpiryMinutes = int.TryParse(builder.Configuration["Jwt:ExpiryMinutes"], out var mins) ? mins : 120
+};
 builder.Services.AddSingleton(jwtOptions);
 
 // Auth services
@@ -37,34 +45,37 @@ builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 builder.Services.AddSingleton<IUserStore, InMemoryUserStore>();
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
+// Authentication/Authorization
 builder.Services
   .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
   .AddJwtBearer(options =>
   {
       options.RequireHttpsMetadata = false;
-      options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+      options.TokenValidationParameters = new TokenValidationParameters
       {
           ValidateIssuer = true,
-          ValidIssuer = builder.Configuration["Jwt:Issuer"],      // string
+          ValidIssuer = jwtOptions.Issuer,
           ValidateAudience = true,
-          ValidAudience = builder.Configuration["Jwt:Audience"],  // string
+          ValidAudience = jwtOptions.Audience,
           ValidateIssuerSigningKey = true,
-          IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
-              System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
           ValidateLifetime = true,
           ClockSkew = TimeSpan.FromMinutes(1)
       };
   });
 
-
 builder.Services.AddAuthorization();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Middleware order
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.EnsureCreatedAsync();
+}
+
 app.UseCors(FrontendOrigin);
 
 app.UseSwagger();
@@ -76,6 +87,7 @@ app.UseAuthorization();
 // Health
 app.MapGet("/", () => Results.Ok(new { status = "ok" }));
 
+// Auth (email/password)
 app.MapPost("/auth/login", (LoginRequest req, IUserStore users, IJwtTokenService jwt) =>
 {
     if (req is null || string.IsNullOrWhiteSpace(req.Email) || req.Password is null)
@@ -91,7 +103,6 @@ app.MapPost("/auth/login", (LoginRequest req, IUserStore users, IJwtTokenService
 })
 .WithName("Login")
 .WithTags("Auth");
-
 
 // Orders (protected)
 app.MapPost("/orders", async (AppDbContext db, Order order) =>
