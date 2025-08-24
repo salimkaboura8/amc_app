@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
+import { OrderData } from '../../../core/models/order';
 
 @Component({
   selector: 'app-new-order-dialog',
@@ -47,11 +48,4 @@ export class NewOrderDialogComponent {
       items: Number(v.items),
     });
   }
-}
-export interface OrderData {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  date: string;
-  items: number;
 }

@@ -7,7 +7,8 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Router } from '@angular/router';
 import { OrdersService } from '../../../core/services/orders.service';
-import { NewOrderDialogComponent, OrderData } from '../new-order-dialog/new-order-dialog';
+import { NewOrderDialogComponent } from '../new-order-dialog/new-order-dialog';
+import { OrderData } from '../../../core/models/order';
 
 type OrderStatus = 'EN_COURS' | 'LIVREE';
 
@@ -52,7 +53,12 @@ export class UserDashboard implements OnInit {
   }
 
   handleCreateOrder(data: OrderData): void {
-    this.newOrderDialogVisible = false;
+    this.ordersService.createOrder(data).subscribe(() => {
+      this.newOrderDialogVisible = false;
+      this.ordersService.getOrders().subscribe((data) => {
+        console.log(data);
+      });
+    });
   }
 
   closeNewOrderDialog(): void {
