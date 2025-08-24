@@ -1,0 +1,48 @@
+<div class="auth-container p-shadow-6 p-p-6 p-shadow-round">
+  <h2 class="auth-title" *ngIf="!isAdmin">Connexion Utilisateur</h2>
+  <h2 class="auth-title" *ngIf="isAdmin">Connexion Administrateur</h2>
+
+  <form #authFormRef="ngForm" (ngSubmit)="onSubmit(authFormRef)" class="form">
+    <div class="field">
+      <input
+        pInputText
+        class="w-full"
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Email"
+        [(ngModel)]="user.email"
+        #email="ngModel"
+        required
+        email
+        [invalid]="email.invalid && (email.touched || authFormRef.submitted)"
+      />
+    </div>
+
+    <div class="field">
+      <p-password
+        class="w-full"
+        id="password"
+        name="password"
+        placeholder="Mot de passe"
+        [(ngModel)]="user.password"
+        #password="ngModel"
+        required
+        [feedback]="false"
+        inputStyleClass="w-full"
+        [inputStyle]="{ width: '100%' }"
+        [style]="{ width: '100%' }"
+        [styleClass]="'w-full'"
+      ></p-password>
+    </div>
+
+    <button pButton class="w-full" severity="secondary" type="submit">
+      <span pButtonLabel>Se connecter</span>
+    </button>
+  </form>
+
+  <p class="toggle-text" (click)="toggleUserType()">
+    <small *ngIf="!isAdmin" class="toggle-link">Se connecter en tant qu'administrateur</small>
+    <small *ngIf="isAdmin" class="toggle-link">Se connecter en tant qu'utilisateur</small>
+  </p>
+</div>
