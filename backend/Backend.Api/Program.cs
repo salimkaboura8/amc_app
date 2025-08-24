@@ -23,6 +23,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+// DbContext (SQLite)
 builder.Services.AddDbContext<AppDbContext>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
@@ -76,6 +77,7 @@ using (var scope = app.Services.CreateScope())
     await db.Database.EnsureCreatedAsync();
 }
 
+
 app.UseCors(FrontendOrigin);
 
 app.UseSwagger();
@@ -105,8 +107,28 @@ app.MapPost("/auth/login", (LoginRequest req, IUserStore users, IJwtTokenService
 .WithTags("Auth");
 
 // Orders (protected)
-app.MapPost("/orders", async (AppDbContext db, Order order) =>
+app.MapPost("/orders", async (AppDbContext db, CreateOrderRequest req) =>
 {
+    if (string.IsNullOrWhiteSpace(req.FirstName) ||
+        string.IsNullOrWhiteSpace(req.LastName) ||
+        string.IsNullOrWhiteSpace(req.PhoneNumber) ||
+        req.NbOfItems <= 0 ||
+        req.Date == default)
+    {
+        return Results.BadRequest(new { error = "Missing or invalid fields." });
+    }
+
+    var order = new Order
+    {
+        FirstName = req.FirstName,
+        LastName = req.LastName,
+        PhoneNumber = req.PhoneNumber,
+        Date = req.Date,
+        NbOfItems = req.NbOfItems,
+        Price = Math.Max(0m, req.NbOfItems * 4.99m),
+        Status = OrderStatus.EN_COURS
+    };
+
     db.Orders.Add(order);
     await db.SaveChangesAsync();
     return Results.Created($"/orders/{order.Id}", order);
@@ -114,6 +136,7 @@ app.MapPost("/orders", async (AppDbContext db, Order order) =>
 .WithName("CreateOrder")
 .WithTags("Orders")
 .RequireAuthorization();
+
 
 app.MapGet("/orders", async (AppDbContext db) =>
 {
@@ -138,8 +161,13 @@ app.MapPut("/orders/{id:int}", async (int id, AppDbContext db, Order input) =>
     var order = await db.Orders.FindAsync(id);
     if (order is null) return Results.NotFound();
 
-    order.Number = input.Number;
-    order.Total = input.Total;
+    order.FirstName = input.FirstName;
+    order.LastName = input.LastName;
+    order.PhoneNumber = input.PhoneNumber;
+    order.Date = input.Date;
+    order.NbOfItems = input.NbOfItems;
+    order.Price = input.Price;
+    order.Status = input.Status;
 
     await db.SaveChangesAsync();
     return Results.NoContent();

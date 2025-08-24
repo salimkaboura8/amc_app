@@ -43,9 +43,9 @@ export class NewOrderDialogComponent {
     this.submitOrder.emit({
       firstName: String(v.firstName),
       lastName: String(v.lastName),
-      phone: String(v.phone),
+      phoneNumber: String(v.phone),
       date,
-      items: Number(v.items),
+      nbOfItems: Number(v.items),
     });
   }
 }

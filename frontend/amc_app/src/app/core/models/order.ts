@@ -1,9 +1,9 @@
 export interface OrderData {
   firstName: string;
   lastName: string;
-  phone: string;
+  phoneNumber: string;
   date: string;
-  items: number;
+  nbOfItems: number;
 }
 
 export interface Order {
