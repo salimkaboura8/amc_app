@@ -3,7 +3,8 @@ namespace Backend.Models;
 public enum OrderStatus
 {
     EN_COURS = 0,
-    LIVREE = 1
+    LIVREE = 1,
+    REFUSEE = -1,
 }
 
 public class Order
