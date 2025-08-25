@@ -15,34 +15,39 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.ToTable("Orders");
-            entity.HasKey(o => o.Id);
+              entity.ToTable("Orders");
+              entity.HasKey(o => o.Id);
 
-            entity.Property(o => o.FirstName)
-                  .IsRequired()
-                  .HasMaxLength(64);
+              entity.Property(o => o.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(64);
 
-            entity.Property(o => o.LastName)
-                  .IsRequired()
-                  .HasMaxLength(64);
+              entity.Property(o => o.LastName)
+                    .IsRequired()
+                    .HasMaxLength(64);
 
-            entity.Property(o => o.PhoneNumber)
-                  .IsRequired()
-                  .HasMaxLength(32);
+              entity.Property(o => o.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(32);
 
-            entity.Property(o => o.Date)
-                  .HasColumnType("date");
+              entity.Property(o => o.Date)
+                    .HasColumnType("date");
 
-            entity.Property(o => o.NbOfItems)
-                  .IsRequired();
+              entity.Property(o => o.NbOfItems)
+                    .IsRequired();
 
-            entity.Property(o => o.Price)
-                  .HasColumnType("decimal(18,2)");
+              entity.Property(o => o.Price)
+                    .HasColumnType("decimal(18,2)");
 
-            entity.Property(o => o.Status)
-                  .HasConversion<string>()        // stores as 'EN_COURS' or 'LIVREE'
-                  .HasMaxLength(16)
-                  .IsRequired();
+              entity.Property(o => o.Status)
+                    .HasConversion<string>()      
+                    .HasMaxLength(16)
+                    .IsRequired();
+                  
+              entity.Property(o => o.Description)
+              .IsRequired()
+              .HasMaxLength(256);
+
         });
     }
 }

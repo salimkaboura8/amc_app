@@ -3,5 +3,6 @@ public record CreateOrderRequest(
     string LastName,
     string PhoneNumber,
     DateTime Date,
-    int NbOfItems
+    int NbOfItems,
+    string Description
 );

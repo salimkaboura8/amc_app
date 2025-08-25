@@ -51,6 +51,13 @@ logs/
 artifacts/
 TestResults/
 
+# SQLite databases (anywhere)
+**/*.db
+**/*.sqlite
+**/*.db-shm
+**/*.db-wal
+*.db-journal
+
 # Visual Studio / Rider
 .vs/
 .idea/

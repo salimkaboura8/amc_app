@@ -126,7 +126,8 @@ app.MapPost("/orders", async (AppDbContext db, CreateOrderRequest req) =>
         Date = req.Date,
         NbOfItems = req.NbOfItems,
         Price = Math.Max(0m, req.NbOfItems * 4.99m),
-        Status = OrderStatus.EN_COURS
+        Status = OrderStatus.EN_COURS,
+        Description = req.Description
     };
 
     db.Orders.Add(order);
@@ -168,6 +169,7 @@ app.MapPut("/orders/{id:int}", async (int id, AppDbContext db, Order input) =>
     order.NbOfItems = input.NbOfItems;
     order.Price = input.Price;
     order.Status = input.Status;
+    order.Description = input.Description;
 
     await db.SaveChangesAsync();
     return Results.NoContent();

@@ -4,6 +4,7 @@ export interface OrderData {
   phoneNumber: string;
   date: string;
   nbOfItems: number;
+  description: string;
 }
 
 export interface Order {

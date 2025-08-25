@@ -17,4 +17,5 @@ public class Order
     public int NbOfItems { get; set; }
     public decimal Price { get; set; }
     public OrderStatus Status { get; set; }
+    public string Description { get; set; } = null!;
 }

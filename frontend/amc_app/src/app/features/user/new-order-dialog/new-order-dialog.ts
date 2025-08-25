@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
 import { OrderData } from '../../../core/models/order';
 
 @Component({
@@ -15,6 +16,7 @@ import { OrderData } from '../../../core/models/order';
     InputTextModule,
     DatePickerModule,
     InputNumberModule,
+    TextareaModule,
     ButtonModule,
   ],
   templateUrl: './new-order-dialog.html',
@@ -34,6 +36,7 @@ export class NewOrderDialogComponent {
     phone: ['', [Validators.required, Validators.maxLength(32)]],
     date: [this.initialDate, [Validators.required]],
     items: [1, [Validators.required, Validators.min(1)]],
+    description: [''],
   });
 
   submit() {
@@ -46,6 +49,7 @@ export class NewOrderDialogComponent {
       phoneNumber: String(v.phone),
       date,
       nbOfItems: Number(v.items),
+      description: String(v.description),
     });
   }
 }
