@@ -8,8 +8,11 @@ export interface OrderData {
 
 export interface Order {
   id?: number;
-  customerName: string;
-  items: Array<{ productId: number; quantity: number }>;
-  total: number;
-  createdAt?: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  date: Date;
+  nbOfItems: number;
+  price: number;
+  status: number;
 }

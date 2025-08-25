@@ -27,6 +27,8 @@
     <p-table
       [value]="orders"
       dataKey="id"
+      sortField="date"
+      [sortOrder]="-1"
       [tableStyle]="{ 'min-width': '640px' }"
       class="orders-table"
     >
@@ -42,11 +44,14 @@
       <ng-template pTemplate="body" let-order>
         <tr>
           <td>{{ order.id }}</td>
-          <td>{{ order.date }}</td>
-          <td>{{ order.itemsCount }}</td>
-          <td>{{ order.amount | number : '1.2-2' }} €</td>
+          <td>{{ order.date | date : 'dd/MM/y' }}</td>
+          <td>{{ order.nbOfItems }}</td>
+          <td>{{ order.price | number : '1.2-2' }} €</td>
           <td>
-            <p-tag [value]="order.status" [severity]="statusSeverity(order.status)"></p-tag>
+            <p-tag
+              [value]="statusLabel(order.status)"
+              [severity]="statusSeverity(order.status)"
+            ></p-tag>
           </td>
         </tr>
       </ng-template>

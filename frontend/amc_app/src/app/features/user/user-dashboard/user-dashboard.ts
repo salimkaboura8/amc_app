@@ -8,17 +8,13 @@ import { TagModule } from 'primeng/tag';
 import { Router } from '@angular/router';
 import { OrdersService } from '../../../core/services/orders.service';
 import { NewOrderDialogComponent } from '../new-order-dialog/new-order-dialog';
-import { OrderData } from '../../../core/models/order';
+import { Order, OrderData } from '../../../core/models/order';
+import { AuthService } from '../../../core/services/auth.service';
 
-type OrderStatus = 'EN_COURS' | 'LIVREE';
-
-type Order = {
-  id: string;
-  date: string;
-  itemsCount: number;
-  amount: number;
-  status: OrderStatus;
-};
+export enum OrderStatusEnum {
+  EN_COURS = 'En cours',
+  LIVREE = 'Livrée',
+}
 
 @Component({
   selector: 'app-user-dashboard',
@@ -40,11 +36,15 @@ export class UserDashboard implements OnInit {
   today = new Date();
   orders: Order[] = [];
 
-  constructor(private router: Router, private ordersService: OrdersService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private ordersService: OrdersService
+  ) {}
 
   ngOnInit(): void {
-    this.ordersService.getOrders().subscribe((data) => {
-      console.log(data);
+    this.ordersService.getOrders().subscribe((orders: Order[]) => {
+      this.orders = orders;
     });
   }
 
@@ -53,11 +53,9 @@ export class UserDashboard implements OnInit {
   }
 
   handleCreateOrder(data: OrderData): void {
-    this.ordersService.createOrder(data).subscribe(() => {
+    this.ordersService.createOrder(data).subscribe((created) => {
       this.newOrderDialogVisible = false;
-      this.ordersService.getOrders().subscribe((data) => {
-        console.log(data);
-      });
+      this.orders = [created, ...this.orders];
     });
   }
 
@@ -66,15 +64,15 @@ export class UserDashboard implements OnInit {
   }
 
   logout(): void {
+    this.authService.logout();
     this.router.navigate(['']);
   }
 
-  statusSeverity(status: OrderStatus): 'success' | 'info' | 'danger' {
-    switch (status) {
-      case 'LIVREE':
-        return 'success';
-      case 'EN_COURS':
-        return 'info';
-    }
+  statusLabel(status: 0 | 1): OrderStatusEnum {
+    return status === 0 ? OrderStatusEnum.EN_COURS : OrderStatusEnum.LIVREE;
+  }
+
+  statusSeverity(status: 0 | 1): 'success' | 'info' {
+    return status === 1 ? 'success' : 'info';
   }
 }
