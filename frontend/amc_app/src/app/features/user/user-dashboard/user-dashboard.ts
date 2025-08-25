@@ -13,7 +13,8 @@ import { AuthService } from '../../../core/services/auth.service';
 
 export enum OrderStatusEnum {
   EN_COURS = 'En cours',
-  LIVREE = 'Livrée',
+  ACCEPTEE = 'Acceptée',
+  REFUSEE = 'Refusée',
 }
 
 @Component({
@@ -68,11 +69,25 @@ export class UserDashboard implements OnInit {
     this.router.navigate(['']);
   }
 
-  statusLabel(status: 0 | 1): OrderStatusEnum {
-    return status === 0 ? OrderStatusEnum.EN_COURS : OrderStatusEnum.LIVREE;
+  statusLabel(status: 0 | 1 | -1): OrderStatusEnum {
+    switch (status) {
+      case 1:
+        return OrderStatusEnum.ACCEPTEE;
+      case -1:
+        return OrderStatusEnum.REFUSEE;
+      default:
+        return OrderStatusEnum.EN_COURS;
+    }
   }
 
-  statusSeverity(status: 0 | 1): 'success' | 'info' {
-    return status === 1 ? 'success' : 'info';
+  statusSeverity(status: 0 | 1 | -1): 'success' | 'info' | 'danger' {
+    switch (status) {
+      case 1:
+        return 'success';
+      case -1:
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 }
