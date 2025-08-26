@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Backend.Auth;
+namespace Amc.Auth;
 
 public record AppUser(string Email, string PasswordHash, string[] Roles);
 

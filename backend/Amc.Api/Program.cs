@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using Backend.Auth;
-using Backend.Data;
-using Backend.DTOs;
-using Backend.Models;
+using Amc.Auth;
+using Amc.Data;
+using Amc.DTOs;
+using Amc.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

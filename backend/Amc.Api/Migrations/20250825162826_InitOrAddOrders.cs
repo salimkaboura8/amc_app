@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Backend.Api.Migrations
+namespace Amc.Api.Migrations
 {
     /// <inheritdoc />
     public partial class InitOrAddOrders : Migration

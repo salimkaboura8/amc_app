@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Backend.Auth;
+namespace Amc.Auth;
 
 public interface IJwtTokenService
 {

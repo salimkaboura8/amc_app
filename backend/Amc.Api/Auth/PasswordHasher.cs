@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace Backend.Auth;
+namespace Amc.Auth;
 
 public interface IPasswordHasher
 {

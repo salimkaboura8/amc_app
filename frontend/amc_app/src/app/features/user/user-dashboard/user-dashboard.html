@@ -27,19 +27,10 @@
     <app-orders-table [orders]="orders" [sortField]="'date'" [sortOrder]="-1"></app-orders-table>
   </div>
 
-  <p-dialog
-    [(visible)]="newOrderDialogVisible"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
-    header="Nouvelle commande"
-    [style]="{ width: '520px' }"
-    (onHide)="closeNewOrderDialog()"
-  >
-    <app-new-order-dialog
-      [initialDate]="today"
-      (submitOrder)="handleCreateOrder($event)"
-      (onCancel)="closeNewOrderDialog()"
-    ></app-new-order-dialog>
-  </p-dialog>
+  <app-new-order-dialog
+    *ngIf="newOrderDialogVisible"
+    [initialDate]="today"
+    (submitOrder)="handleCreateOrder($event)"
+    (onCancel)="closeNewOrderDialog()"
+  ></app-new-order-dialog>
 </div>

@@ -7,6 +7,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { OrderData } from '../../../core/models/order';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-new-order-dialog',
@@ -18,6 +19,7 @@ import { OrderData } from '../../../core/models/order';
     InputNumberModule,
     TextareaModule,
     ButtonModule,
+    DialogModule,
   ],
   templateUrl: './new-order-dialog.html',
   styleUrls: ['./new-order-dialog.scss'],
@@ -39,6 +41,9 @@ export class NewOrderDialogComponent {
     description: [''],
   });
 
+  initialFormValue = this.form.getRawValue();
+  visible = true;
+
   submit() {
     if (this.form.invalid) return;
     const v = this.form.value;
@@ -51,5 +56,10 @@ export class NewOrderDialogComponent {
       nbOfItems: Number(v.items),
       description: String(v.description),
     });
+  }
+
+  close(): void {
+    this.form.reset(this.initialFormValue);
+    this.onCancel.emit();
   }
 }

@@ -1,7 +1,7 @@
-using Backend.Models;
+using Amc.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Data;
+namespace Amc.Data;
 
 public static class AuthDbExtensions
 {
