@@ -1,0 +1,30 @@
+.dashboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--surface-ground);
+  padding-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-left: 0.25rem;
+}
+
+.content {
+  flex: 1;
+  padding: 1.25rem 2rem;
+  background: var(--surface-section);
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}

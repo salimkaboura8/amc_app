@@ -1,38 +1,65 @@
+.orders-table {
+  width: 100%;
+  min-width: 640px;
+}
+
 .icon-btn {
   background: transparent;
   border: 0;
-  padding: 0.25rem;
+  padding: 0.5rem;
   cursor: pointer;
   line-height: 1;
+  border-radius: 50%;
+  transition: background 0.14s, color 0.14s;
+}
+
+.icon-btn:hover {
+  background: var(--primary-100, #f3f3f3);
+}
+
+.actions {
+  text-align: center;
+  width: 60px;
+}
+
+:host ::ng-deep .p-table .p-sortable-column:not(.p-highlight):hover {
+  background: transparent !important;
+  color: inherit !important;
+  border-color: transparent !important;
+}
+
+:host ::ng-deep .p-table .p-sortable-column:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+:host ::ng-deep .p-table .p-sortable-column.p-highlight {
+  background: transparent !important;
+  color: inherit !important;
 }
 
 :host ::ng-deep .p-dialog .p-dialog-content {
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem;
 }
 
 :host ::ng-deep .p-dialog .p-dialog-header {
-  padding: 1rem 1.5rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--surface-border, #e5e7eb);
 }
 
-:host ::ng-deep .p-dialog .p-dialog-footer {
-  padding: 0.75rem 1.5rem;
-  border-top: 1px solid var(--surface-border, #e5e7eb);
-}
-
 .order-details {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .order-details .row {
   display: grid;
   grid-template-columns: 140px 1fr;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed var(--surface-border, #e5e7eb);
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--surface-border, #f1f3f4);
 }
 
 .order-details .row:last-child {
@@ -42,46 +69,111 @@
 .order-details .label {
   color: var(--text-color-secondary, #6b7280);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  text-align: right;
 }
 
 .order-details .value {
   color: var(--text-color, #111827);
-  font-size: 0.95rem;
-  display: inline-flex;
+  font-size: 0.98rem;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .order-details .value .p-tag {
   margin: 0;
 }
 
-.actions .icon-btn {
-  background: transparent;
-  border: 0;
-  padding: 0.25rem;
-  cursor: pointer;
-  line-height: 1;
+.actions-row {
+  display: flex !important;
+  justify-content: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
 }
 
-@media (max-width: 600px) {
-  :host ::ng-deep .p-dialog {
-    width: calc(100vw - 2rem) !important;
-    max-width: 520px;
-  }
+.btn-accept {
+  width: 200px;
+  background: var(--green-500, #22c55e) !important;
+  border-color: var(--green-500, #22c55e) !important;
+  color: #fff !important;
+  font-weight: 500;
+}
 
+.btn-accept:not(:disabled):hover {
+  background: var(--green-600, #16a34a) !important;
+  border-color: var(--green-700, #15803d) !important;
+  color: #fff !important;
+}
+
+.btn-accept:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--surface-300, #e5e7eb) !important;
+  border-color: var(--surface-300, #e5e7eb) !important;
+}
+
+.btn-refuse {
+  width: 200px;
+
+  background: var(--red-500, #ef4444) !important;
+  border-color: var(--red-500, #ef4444) !important;
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.btn-refuse:not(:disabled):hover {
+  background: var(--red-600, #dc2626) !important;
+  border-color: var(--red-700, #b91c1c) !important;
+  color: #fff !important;
+}
+
+.btn-refuse:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--surface-300, #e5e7eb) !important;
+  border-color: var(--surface-300, #e5e7eb) !important;
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .p-dialog {
+    width: calc(100vw - 1rem) !important;
+    max-width: 520px;
+    margin: 0.5rem;
+  }
   .order-details .row {
     grid-template-columns: 1fr;
-    gap: 0.25rem;
-    padding: 0.6rem 0;
+    gap: 0.5rem;
+    text-align: left;
   }
-
   .order-details .label {
-    font-size: 0.85rem;
+    text-align: left;
+    font-size: 0.9rem;
   }
-
   .order-details .value {
     font-size: 0.95rem;
+  }
+  .actions-row .value {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+  .btn-accept,
+  .btn-refuse {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .p-dialog .p-dialog-content {
+    padding: 1rem;
+  }
+  :host ::ng-deep .p-dialog .p-dialog-header {
+    padding: 1rem;
+  }
+  .order-details .row {
+    padding: 0.5rem 0;
   }
 }

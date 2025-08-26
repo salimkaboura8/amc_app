@@ -6,35 +6,47 @@
   [paginator]="showPaginator"
   [rows]="rows"
   [rowsPerPageOptions]="rowsPerPageOptions"
+  [columns]="cols"
   class="orders-table"
 >
-  <ng-template pTemplate="header">
+  <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngFor="let c of cols" [pSortableColumn]="c.field">{{ c.header }}</th>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        {{ col.header }}
+      </th>
       <th>Infos</th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-o>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
-      <td>{{ o.id }}</td>
-      <td>{{ o.date | date : 'dd/MM/y' }}</td>
-      <td>{{ o.nbOfItems }}</td>
-      <td>{{ o.price | number : '1.2-2' }} €</td>
-      <td>
-        <p-tag [value]="statusLabel(o.status)" [severity]="statusSeverity(o.status)"></p-tag>
+      <td *ngFor="let col of columns">
+        <ng-container [ngSwitch]="col.field">
+          <span *ngSwitchCase="'date'">
+            {{ rowData[col.field] | date : 'dd/MM/y' }}
+          </span>
+          <span *ngSwitchCase="'price'"> {{ rowData[col.field] | number : '1.2-2' }} € </span>
+          <p-tag
+            *ngSwitchCase="'status'"
+            [value]="statusLabel(rowData[col.field])"
+            [severity]="statusSeverity(rowData[col.field])"
+          ></p-tag>
+          <span *ngSwitchDefault>
+            {{ getFieldValue(rowData, col.field) }}
+          </span>
+        </ng-container>
       </td>
       <td class="actions">
-        <button type="button" class="icon-btn" (click)="openDetails(o)">
+        <button type="button" class="icon-btn" (click)="openDetails(rowData)">
           <i class="pi pi-info-circle" aria-hidden="true"></i>
         </button>
       </td>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage">
+  <ng-template pTemplate="emptymessage" let-columns="columns">
     <tr>
-      <td colspan="6">{{ emptyMessage }}</td>
+      <td [attr.colspan]="columns.length + 1">{{ emptyMessage }}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -49,48 +61,48 @@
   (onHide)="closeDetails()"
 >
   <div *ngIf="selectedOrder" class="order-details">
-    <div class="row">
-      <span class="label">Prénom</span>
-      <span class="value">{{ selectedOrder.firstName }}</span>
-    </div>
-    <div class="row">
-      <span class="label">Nom</span>
-      <span class="value">{{ selectedOrder.lastName }}</span>
-    </div>
-    <div class="row">
-      <span class="label">Num. Téléphone</span>
-      <span class="value">{{ selectedOrder.phoneNumber }}</span>
-    </div>
-
-    <div class="row">
-      <span class="label">Commande</span>
-      <span class="value">#{{ selectedOrder.id }}</span>
-    </div>
-    <div class="row">
-      <span class="label">Date</span>
-      <span class="value">{{ selectedOrder.date | date : 'dd/MM/y  à  HH:mm' }}</span>
-    </div>
-    <div class="row">
-      <span class="label">Articles</span>
-      <span class="value">{{ selectedOrder.nbOfItems }}</span>
-    </div>
-    <div class="row">
-      <span class="label">Montant</span>
-      <span class="value">{{ selectedOrder.price | number : '1.2-2' }} €</span>
-    </div>
-    <div class="row">
-      <span class="label">Statut</span>
+    <div class="row" *ngFor="let col of cols">
+      <span class="label">{{ col.header }}</span>
       <span class="value">
-        <p-tag
-          [value]="statusLabel(selectedOrder.status)"
-          [severity]="statusSeverity(selectedOrder.status)"
-        ></p-tag>
+        <ng-container [ngSwitch]="col.field">
+          <span *ngSwitchCase="'date'">
+            {{ getFieldValue(selectedOrder, col.field) | date : 'dd/MM/y HH:mm' }}
+          </span>
+          <span *ngSwitchCase="'price'">
+            {{ getFieldValue(selectedOrder, col.field) | number : '1.2-2' }} €
+          </span>
+          <p-tag
+            *ngSwitchCase="'status'"
+            [value]="statusLabel(getFieldValue(selectedOrder, col.field))"
+            [severity]="statusSeverity(getFieldValue(selectedOrder, col.field))"
+          ></p-tag>
+          <span *ngSwitchDefault>
+            {{ getFieldValue(selectedOrder, col.field) }}
+          </span>
+        </ng-container>
       </span>
     </div>
 
-    <div class="row" *ngIf="selectedOrder.description">
-      <span class="label">Description</span>
-      <span class="value">{{ selectedOrder.description }}</span>
+    <div class="row actions-row" *ngIf="isAdmin">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-check"
+        label="Accepter"
+        class="btn-accept"
+        (click)="accept(selectedOrder)"
+        [disabled]="selectedOrder.status === OrderStatus.ACCEPTEE"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        label="Refuser"
+        class="btn-refuse"
+        severity="danger"
+        (click)="refuse(selectedOrder)"
+        [disabled]="selectedOrder.status === OrderStatus.REFUSEE"
+      ></button>
     </div>
   </div>
 </p-dialog>

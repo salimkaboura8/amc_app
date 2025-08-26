@@ -1,1 +1,26 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard">
+  <p-toolbar class="header">
+    <div class="p-toolbar-group-start">
+      <span class="title">Administration - Commandes</span>
+    </div>
+    <div class="p-toolbar-group-end">
+      <button
+        pButton
+        icon="pi pi-sign-out"
+        label="Se déconnecter"
+        severity="secondary"
+        (click)="logout()"
+      ></button>
+    </div>
+  </p-toolbar>
+  <div class="content">
+    <h3 class="section-title">Toutes les commandes</h3>
+    <app-orders-table
+      [orders]="orders"
+      [cols]="cols"
+      [sortField]="'date'"
+      [sortOrder]="-1"
+      [isAdmin]="true"
+    ></app-orders-table>
+  </div>
+</div>
