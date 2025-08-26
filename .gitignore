@@ -51,7 +51,7 @@ logs/
 artifacts/
 TestResults/
 
-# SQLite databases (anywhere)
+# SQLite databases
 **/*.db
 **/*.sqlite
 **/*.db-shm

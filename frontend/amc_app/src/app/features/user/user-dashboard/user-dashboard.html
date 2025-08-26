@@ -24,43 +24,7 @@
   <div class="content">
     <h3 class="section-title">Mes commandes</h3>
 
-    <p-table
-      [value]="orders"
-      dataKey="id"
-      sortField="date"
-      [sortOrder]="-1"
-      [tableStyle]="{ 'min-width': '640px' }"
-      class="orders-table"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Commande</th>
-          <th>Date</th>
-          <th>Articles</th>
-          <th>Montant</th>
-          <th>Statut</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-order>
-        <tr>
-          <td>{{ order.id }}</td>
-          <td>{{ order.date | date : 'dd/MM/y' }}</td>
-          <td>{{ order.nbOfItems }}</td>
-          <td>{{ order.price | number : '1.2-2' }} €</td>
-          <td>
-            <p-tag
-              [value]="statusLabel(order.status)"
-              [severity]="statusSeverity(order.status)"
-            ></p-tag>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="5">Aucune commande pour le moment.</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <app-orders-table [orders]="orders" [sortField]="'date'" [sortOrder]="-1"></app-orders-table>
   </div>
 
   <p-dialog

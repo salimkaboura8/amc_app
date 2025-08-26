@@ -1,0 +1,96 @@
+<p-table
+  [value]="orders"
+  dataKey="id"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
+  [paginator]="showPaginator"
+  [rows]="rows"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  class="orders-table"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let c of cols" [pSortableColumn]="c.field">{{ c.header }}</th>
+      <th>Infos</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-o>
+    <tr>
+      <td>{{ o.id }}</td>
+      <td>{{ o.date | date : 'dd/MM/y' }}</td>
+      <td>{{ o.nbOfItems }}</td>
+      <td>{{ o.price | number : '1.2-2' }} €</td>
+      <td>
+        <p-tag [value]="statusLabel(o.status)" [severity]="statusSeverity(o.status)"></p-tag>
+      </td>
+      <td class="actions">
+        <button type="button" class="icon-btn" (click)="openDetails(o)">
+          <i class="pi pi-info-circle" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">{{ emptyMessage }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="detailsVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '520px' }"
+  header="Détails de la commande"
+  (onHide)="closeDetails()"
+>
+  <div *ngIf="selectedOrder" class="order-details">
+    <div class="row">
+      <span class="label">Prénom</span>
+      <span class="value">{{ selectedOrder.firstName }}</span>
+    </div>
+    <div class="row">
+      <span class="label">Nom</span>
+      <span class="value">{{ selectedOrder.lastName }}</span>
+    </div>
+    <div class="row">
+      <span class="label">Num. Téléphone</span>
+      <span class="value">{{ selectedOrder.phoneNumber }}</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Commande</span>
+      <span class="value">#{{ selectedOrder.id }}</span>
+    </div>
+    <div class="row">
+      <span class="label">Date</span>
+      <span class="value">{{ selectedOrder.date | date : 'dd/MM/y HH:mm' }}</span>
+    </div>
+    <div class="row">
+      <span class="label">Articles</span>
+      <span class="value">{{ selectedOrder.nbOfItems }}</span>
+    </div>
+    <div class="row">
+      <span class="label">Montant</span>
+      <span class="value">{{ selectedOrder.price | number : '1.2-2' }} €</span>
+    </div>
+    <div class="row">
+      <span class="label">Statut</span>
+      <span class="value">
+        <p-tag
+          [value]="statusLabel(selectedOrder.status)"
+          [severity]="statusSeverity(selectedOrder.status)"
+        ></p-tag>
+      </span>
+    </div>
+
+    <div class="row" *ngIf="selectedOrder.description">
+      <span class="label">Description</span>
+      <span class="value">{{ selectedOrder.description }}</span>
+    </div>
+  </div>
+</p-dialog>

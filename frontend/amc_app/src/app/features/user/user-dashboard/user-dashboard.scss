@@ -4,13 +4,15 @@
   padding: 0 1rem;
 }
 
-.header .title {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
+.header {
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
 
-.header .mr-2 {
-  margin-right: 0.5rem;
+  .mr-2 {
+    margin-right: 0.5rem;
+  }
 }
 
 .content {

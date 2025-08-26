@@ -1,0 +1,87 @@
+.icon-btn {
+  background: transparent;
+  border: 0;
+  padding: 0.25rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-content {
+  padding: 1.25rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--surface-border, #e5e7eb);
+}
+
+:host ::ng-deep .p-dialog .p-dialog-footer {
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid var(--surface-border, #e5e7eb);
+}
+
+.order-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.order-details .row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--surface-border, #e5e7eb);
+}
+
+.order-details .row:last-child {
+  border-bottom: 0;
+}
+
+.order-details .label {
+  color: var(--text-color-secondary, #6b7280);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.order-details .value {
+  color: var(--text-color, #111827);
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.order-details .value .p-tag {
+  margin: 0;
+}
+
+.actions .icon-btn {
+  background: transparent;
+  border: 0;
+  padding: 0.25rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+@media (max-width: 600px) {
+  :host ::ng-deep .p-dialog {
+    width: calc(100vw - 2rem) !important;
+    max-width: 520px;
+  }
+
+  .order-details .row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.6rem 0;
+  }
+
+  .order-details .label {
+    font-size: 0.85rem;
+  }
+
+  .order-details .value {
+    font-size: 0.95rem;
+  }
+}

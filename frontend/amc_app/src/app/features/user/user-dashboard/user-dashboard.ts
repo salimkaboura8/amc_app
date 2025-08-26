@@ -8,14 +8,9 @@ import { TagModule } from 'primeng/tag';
 import { Router } from '@angular/router';
 import { OrdersService } from '../../../core/services/orders.service';
 import { NewOrderDialogComponent } from '../new-order-dialog/new-order-dialog';
-import { Order, OrderData } from '../../../core/models/order';
+import { Order, OrderData, OrderStatus } from '../../../core/models/order';
 import { AuthService } from '../../../core/services/auth.service';
-
-export enum OrderStatusEnum {
-  EN_COURS = 'En cours',
-  ACCEPTEE = 'Acceptée',
-  REFUSEE = 'Refusée',
-}
+import { OrdersTable } from '../../../shared/orders-table/orders-table';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -28,6 +23,7 @@ export enum OrderStatusEnum {
     TableModule,
     TagModule,
     NewOrderDialogComponent,
+    OrdersTable,
   ],
   templateUrl: './user-dashboard.html',
   styleUrls: ['./user-dashboard.scss'],
@@ -69,14 +65,14 @@ export class UserDashboard implements OnInit {
     this.router.navigate(['']);
   }
 
-  statusLabel(status: 0 | 1 | -1): OrderStatusEnum {
+  statusLabel(status: 0 | 1 | -1): OrderStatus {
     switch (status) {
       case 1:
-        return OrderStatusEnum.ACCEPTEE;
+        return OrderStatus.ACCEPTEE;
       case -1:
-        return OrderStatusEnum.REFUSEE;
+        return OrderStatus.REFUSEE;
       default:
-        return OrderStatusEnum.EN_COURS;
+        return OrderStatus.EN_COURS;
     }
   }
 
