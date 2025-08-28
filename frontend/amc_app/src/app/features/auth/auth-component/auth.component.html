@@ -2,6 +2,10 @@
   <h2 class="auth-title" *ngIf="!isAdmin">Connexion Utilisateur</h2>
   <h2 class="auth-title" *ngIf="isAdmin">Connexion Administrateur</h2>
 
+  <div style="margin-bottom: 1rem" *ngIf="errorMessage">
+    <p-message severity="error" [text]="errorMessage" styleClass="w-full"></p-message>
+  </div>
+
   <form #authFormRef="ngForm" (ngSubmit)="onSubmit(authFormRef)" class="form">
     <div class="field">
       <input
@@ -36,7 +40,14 @@
       ></p-password>
     </div>
 
-    <button pButton class="w-full" severity="secondary" type="submit">
+    <button
+      pButton
+      class="w-full"
+      severity="secondary"
+      type="submit"
+      [loading]="isLoading"
+      [disabled]="!authFormRef.valid || isLoading"
+    >
       <span pButtonLabel>Se connecter</span>
     </button>
   </form>

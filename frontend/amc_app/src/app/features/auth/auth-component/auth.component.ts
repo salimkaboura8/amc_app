@@ -29,6 +29,8 @@ type AuthUser = {
 })
 export class AuthComponent {
   isAdmin = false;
+  isLoading = false;
+  errorMessage = '';
 
   user: AuthUser = {
     email: '',
@@ -39,6 +41,7 @@ export class AuthComponent {
 
   toggleUserType(): void {
     this.isAdmin = !this.isAdmin;
+    this.errorMessage = ''; // Clear error when switching
   }
 
   onSubmit(form: NgForm): void {
@@ -46,6 +49,10 @@ export class AuthComponent {
       form.control.markAllAsTouched();
       return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
     const { email, password } = form.value;
     this.authService.login({ email, password }).subscribe({
       next: () => {
@@ -60,9 +67,22 @@ export class AuthComponent {
           : [];
         const role = roles.includes('Admin') ? 'admin' : 'user';
         this.router.navigate([`/${role}/dashboard`]);
+        this.isLoading = false;
       },
-      error: () => form.control.setErrors({ auth: true }),
+      error: (error) => {
+        this.isLoading = false;
+        // Handle different error types
+        if (error.status === 401) {
+          this.errorMessage = 'Email ou mot de passe incorrect';
+        } else if (error.status === 403) {
+          this.errorMessage = 'Accès non autorisé';
+        } else if (error.status === 0) {
+          this.errorMessage = 'Impossible de se connecter au serveur';
+        } else {
+          this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+        }
+        form.control.setErrors({ auth: true });
+      },
     });
-
   }
 }
