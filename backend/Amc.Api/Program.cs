@@ -85,6 +85,12 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.MapFallbackToFile("index.html");
+
+
 // Health
 app.MapGet("/", () => Results.Ok(new { status = "ok" }));
 
