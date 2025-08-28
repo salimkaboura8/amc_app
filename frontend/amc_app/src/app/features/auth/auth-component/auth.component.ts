@@ -56,33 +56,33 @@ export class AuthComponent {
     const { email, password } = form.value;
     this.authService.login({ email, password }).subscribe({
       next: () => {
-        const token = this.authService.getToken();
-        const payload = token ? JSON.parse(atob(token.split('.')[1])) : null;
-        const roles: string[] = payload?.[
-          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-        ]
-          ? Array.isArray(payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
-            ? payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-            : [payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']]
-          : [];
-        const role = roles.includes('Admin') ? 'admin' : 'user';
+        const role = this.extractUserRole();
         this.router.navigate([`/${role}/dashboard`]);
         this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
-        // Handle different error types
-        if (error.status === 401) {
-          this.errorMessage = 'Email ou mot de passe incorrect';
-        } else if (error.status === 403) {
-          this.errorMessage = 'Accès non autorisé';
-        } else if (error.status === 0) {
-          this.errorMessage = 'Impossible de se connecter au serveur';
-        } else {
-          this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
-        }
+        this.errorMessage = this.getErrorMessage(error.status);
         form.control.setErrors({ auth: true });
       },
     });
+  }
+
+  private extractUserRole(): string {
+    const token = this.authService.getToken();
+    const payload = token ? JSON.parse(atob(token.split('.')[1])) : null;
+    const ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+    const roles = payload?.[ROLE_CLAIM] || [];
+    const roleArray = Array.isArray(roles) ? roles : [roles];
+    return roleArray.includes('Admin') ? 'admin' : 'user';
+  }
+
+  private getErrorMessage(status: number): string {
+    const messages: { [key: number]: string } = {
+      401: 'Email ou mot de passe incorrect',
+      403: 'Accès non autorisé',
+      0: 'Impossible de se connecter au serveur',
+    };
+    return messages[status] || 'Une erreur est survenue. Veuillez réessayer.';
   }
 }
