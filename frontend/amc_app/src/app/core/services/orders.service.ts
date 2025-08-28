@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { mapOrderStatus, Order, OrderData, OrderResponse } from '../models/order';
+import { environment } from '../../../environments/environment';
 
-const API_BASE = 'http://localhost:5072';
+const API_BASE = environment.apiUrl;
 const LOGIN_ENDPOINT = `${API_BASE}/orders`;
 
 @Injectable({

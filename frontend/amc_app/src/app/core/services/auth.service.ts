@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, tap } from 'rxjs';
 import { StorageService } from './storage.service';
+import { environment } from '../../../environments/environment';
 
-const API_BASE = 'http://localhost:5072';
+const API_BASE = environment.apiUrl;
 const LOGIN_ENDPOINT = `${API_BASE}/auth/login`;
 const TOKEN_KEY = 'auth_token';
 
