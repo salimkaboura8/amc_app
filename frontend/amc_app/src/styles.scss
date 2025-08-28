@@ -1,5 +1,9 @@
 @import 'primeicons/primeicons.css';
 
+* {
+  color-scheme: light only !important;
+}
+
 :root {
   --app-font: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
