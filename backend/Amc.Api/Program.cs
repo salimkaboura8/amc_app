@@ -7,13 +7,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// CORS
+// CORS 
 const string FrontendOrigin = "FrontendOrigin";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendOrigin, policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(
+                "http://localhost:4200",          
+                "https://amc-app-six.vercel.app"  
+              )
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
