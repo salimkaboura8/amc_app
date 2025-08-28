@@ -60,7 +60,7 @@
   header="Détails de la commande"
   (onHide)="closeDetails()"
 >
-  <div *ngIf="selectedOrder" class="order-details">
+  <div *ngIf="selectedOrder && selectedOrder.id && !isLoading" class="order-details">
     <div class="row" *ngFor="let col of cols">
       <span class="label">{{ col.header }}</span>
       <span class="value">
@@ -90,8 +90,8 @@
         icon="pi pi-check"
         label="Accepter"
         class="btn-accept"
-        (click)="accept(selectedOrder)"
-        [disabled]="selectedOrder.status === OrderStatus.ACCEPTEE"
+        (click)="accept(selectedOrder.id)"
+        [disabled]="selectedOrder.status === OrderStatus.ACCEPTEE || isLoading"
       ></button>
       <button
         pButton
@@ -100,9 +100,13 @@
         label="Refuser"
         class="btn-refuse"
         severity="danger"
-        (click)="refuse(selectedOrder)"
-        [disabled]="selectedOrder.status === OrderStatus.REFUSEE"
+        (click)="refuse(selectedOrder.id)"
+        [disabled]="selectedOrder.status === OrderStatus.REFUSEE || isLoading"
       ></button>
     </div>
+  </div>
+
+  <div class="order-details" *ngIf="isLoading">
+    <p-progressSpinner styleClass="acting-spinner"></p-progressSpinner>
   </div>
 </p-dialog>

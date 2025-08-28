@@ -21,4 +21,12 @@ export class OrdersService {
   createOrder(order: OrderData): Observable<Order> {
     return this.http.post<OrderResponse>(LOGIN_ENDPOINT, order).pipe(map(mapOrderStatus));
   }
+
+  acceptOrder(id: number): Observable<void> {
+    return this.http.post<void>(`${LOGIN_ENDPOINT}/${id}/accept`, {});
+  }
+
+  refuseOrder(id: number): Observable<void> {
+    return this.http.post<void>(`${LOGIN_ENDPOINT}/${id}/refuse`, {});
+  }
 }

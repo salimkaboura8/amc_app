@@ -1,7 +1,7 @@
 <div class="dashboard">
   <p-toolbar class="header">
     <div class="p-toolbar-group-start">
-      <span class="title">Administration - Commandes</span>
+      <span class="title">Administration</span>
     </div>
     <div class="p-toolbar-group-end">
       <button
@@ -21,6 +21,8 @@
       [sortField]="'date'"
       [sortOrder]="-1"
       [isAdmin]="true"
+      (acceptOrder)="handleAccept($event)"
+      (refuseOrder)="handleRefuse($event)"
     ></app-orders-table>
   </div>
 </div>

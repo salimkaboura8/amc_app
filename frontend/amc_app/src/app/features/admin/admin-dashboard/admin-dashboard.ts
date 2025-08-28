@@ -11,13 +11,14 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-admin-dashboard',
+  standalone: true,
   imports: [CommonModule, ToolbarModule, ButtonModule, DialogModule, OrdersTable],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss',
 })
 export class AdminDashboard implements OnInit {
   orders: Order[] = [];
-  selectedOrder: Order | null = null;
+
   cols = [
     { field: 'id', header: 'Commande' },
     { field: 'firstName', header: 'Prénom' },
@@ -40,30 +41,30 @@ export class AdminDashboard implements OnInit {
     });
   }
 
-  openOrderDialog(order: Order): void {
-    this.selectedOrder = order;
+  handleAccept(orderId: number): void {
+    this.ordersService.acceptOrder(orderId).subscribe({
+      next: () => {
+        this.updateOrderStatus(orderId, OrderStatus.ACCEPTEE);
+      },
+      error: (error) => {
+        console.error('Error accepting order:', error);
+      },
+    });
   }
 
-  closeDialog(): void {
-    this.selectedOrder = null;
+  handleRefuse(orderId: number): void {
+    this.ordersService.refuseOrder(orderId).subscribe({
+      next: () => {
+        this.updateOrderStatus(orderId, OrderStatus.REFUSEE);
+      },
+      error: (error) => {
+        console.error('Error refusing order:', error);
+      },
+    });
   }
 
-  handleAccept(order: Order): void {
-    // this.ordersService.acceptOrder(order.id).subscribe(() => {
-    //   this.updateOrderStatus(order.id, OrderStatus.ACCEPTEE);
-    //   this.closeDialog();
-    // });
-  }
-
-  handleRefuse(order: Order): void {
-    // this.ordersService.refuseOrder(order.id).subscribe(() => {
-    //   this.updateOrderStatus(order.id, OrderStatus.REFUSEE);
-    //   this.closeDialog();
-    // });
-  }
-
-  updateOrderStatus(id: string, status: OrderStatus): void {
-    // this.orders = this.orders.map((o) => (o.id === id ? { ...o, status } : o));
+  updateOrderStatus(id: number, status: OrderStatus): void {
+    this.orders = this.orders.map((o) => (o.id === id ? { ...o, status } : o));
   }
 
   logout(): void {

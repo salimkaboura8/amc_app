@@ -1,14 +1,23 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Order, OrderStatus } from '../../core/models/order';
-import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-orders-table',
-  imports: [CommonModule, TagModule, TableModule, DialogModule, ButtonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    TagModule,
+    ProgressSpinnerModule,
+    TableModule,
+    DialogModule,
+    ButtonModule,
+  ],
   templateUrl: './orders-table.html',
   styleUrl: './orders-table.scss',
 })
@@ -25,7 +34,6 @@ export class OrdersTable {
     { field: 'status', header: 'Statut' },
   ];
   @Input() emptyMessage = 'Aucune commande pour le moment.';
-
   @Input() sortField: keyof Order = 'date';
   @Input() sortOrder: 1 | -1 = -1;
   @Input() showPaginator = false;
@@ -33,12 +41,13 @@ export class OrdersTable {
   @Input() rowsPerPageOptions: number[] = [5, 10, 20];
   @Input() isAdmin = false;
 
-  @Output() acceptOrder = new EventEmitter<Order>();
-  @Output() refuseOrder = new EventEmitter<Order>();
+  @Output() acceptOrder = new EventEmitter<number>();
+  @Output() refuseOrder = new EventEmitter<number>();
 
   detailsVisible = false;
   selectedOrder: Order | null = null;
   OrderStatus = OrderStatus;
+  isLoading = false;
 
   openDetails(order: Order) {
     this.selectedOrder = order;
@@ -48,6 +57,7 @@ export class OrdersTable {
   closeDetails() {
     this.detailsVisible = false;
     this.selectedOrder = null;
+    this.isLoading = false;
   }
 
   statusLabel(status: OrderStatus): string {
@@ -61,19 +71,40 @@ export class OrdersTable {
     }
   }
 
-  statusSeverity(status: OrderStatus): 'info' | 'success' {
-    return status === OrderStatus.EN_COURS ? 'info' : 'success';
+  statusSeverity(status: OrderStatus): 'info' | 'success' | 'danger' {
+    switch (status) {
+      case OrderStatus.EN_COURS:
+        return 'info';
+      case OrderStatus.ACCEPTEE:
+        return 'success';
+      case OrderStatus.REFUSEE:
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 
   getFieldValue(order: any, field: string): any {
     return order[field];
   }
 
-  accept(order: Order) {
-    this.acceptOrder.emit(order);
+  accept(orderId: number) {
+    this.isLoading = true;
+
+    this.acceptOrder.emit(orderId);
+
+    setTimeout(() => {
+      this.closeDetails();
+    }, 500);
   }
 
-  refuse(order: Order) {
-    this.refuseOrder.emit(order);
+  refuse(orderId: number) {
+    this.isLoading = true;
+
+    this.refuseOrder.emit(orderId);
+
+    setTimeout(() => {
+      this.closeDetails();
+    }, 500);
   }
 }
