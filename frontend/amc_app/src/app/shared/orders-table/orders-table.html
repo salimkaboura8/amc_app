@@ -44,9 +44,9 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="emptymessage" let-columns="columns">
+  <ng-template pTemplate="emptymessage" let-columns="cols">
     <tr>
-      <td [attr.colspan]="columns.length + 1">{{ emptyMessage }}</td>
+      <td [attr.colspan]="cols.length + 1">{{ emptyMessage }}</td>
     </tr>
   </ng-template>
 </p-table>
